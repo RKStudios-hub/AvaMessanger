@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'message') {
                     handleIncomingMessage(data);
+                } else if (data.type === 'qr') {
+                    console.log('QR code received:', data.data ? 'yes' : 'no');
+                    showQRCode(data.data);
+                } else if (data.type === 'connected') {
+                    hideQRCode();
                 }
             };
 
@@ -339,7 +344,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <p class="chat-item-last-message">${highlightedPreview}</p>
                 </div>
-                <button class="chat-delete-btn" title="Delete chat"><i class="fas fa-trash"></i></button>
             `;
 
             // Lazy load profile picture
@@ -369,11 +373,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             chatItem.addEventListener('click', () => showChatConversation(jid));
             
-            // Delete button handler
-            const deleteBtn = chatItem.querySelector('.chat-delete-btn');
-            deleteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
+            // Long press for chat deletion (right-click)
+            chatItem.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
                 showDeleteChatModal(jid, contactInfo.name);
+            });
+            
+            // Touch long press
+            let chatLongPressTimer;
+            chatItem.addEventListener('touchstart', (e) => {
+                chatLongPressTimer = setTimeout(() => {
+                    const touch = e.touches[0];
+                    showDeleteChatModal(jid, contactInfo.name);
+                }, 500);
+            });
+            chatItem.addEventListener('touchend', () => {
+                clearTimeout(chatLongPressTimer);
+            });
+            chatItem.addEventListener('touchmove', () => {
+                clearTimeout(chatLongPressTimer);
             });
             
             chatItemsContainer.appendChild(chatItem);
@@ -1173,6 +1191,58 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === syncSuccessModal) syncSuccessModal.classList.add('hidden');
     });
     
+    // Delete Chat Modal
+    const deleteChatModal = document.getElementById('delete-chat-modal');
+    let chatToDelete = null;
+    
+    function showDeleteChatModal(jid, chatName) {
+        chatToDelete = jid;
+        deleteChatModal.classList.remove('hidden');
+    }
+    
+    document.getElementById('cancel-delete-chat')?.addEventListener('click', () => {
+        deleteChatModal.classList.add('hidden');
+        chatToDelete = null;
+    });
+    
+    document.getElementById('confirm-delete-chat')?.addEventListener('click', async () => {
+        if (!chatToDelete) return;
+        
+        try {
+            const encodedJid = encodeURIComponent(chatToDelete);
+            const response = await fetch(`/api/delete-chat/${encodedJid}`, { method: 'DELETE' });
+            const data = await response.json();
+            
+            if (data.success) {
+                // Remove from local data
+                delete allChatsData[chatToDelete];
+                
+                // If this was the active chat, go back to list
+                if (activeChatJid === chatToDelete) {
+                    switchView('chat-list-view');
+                }
+                
+                renderChatList();
+                showToast('Chat deleted successfully');
+            } else {
+                showToast('Failed to delete chat');
+            }
+        } catch (error) {
+            console.error('Error deleting chat:', error);
+            showToast('Error deleting chat');
+        }
+        
+        deleteChatModal.classList.add('hidden');
+        chatToDelete = null;
+    });
+    
+    deleteChatModal?.addEventListener('click', (e) => {
+        if (e.target === deleteChatModal) {
+            deleteChatModal.classList.add('hidden');
+            chatToDelete = null;
+        }
+    });
+    
     async function showSyncPreview() {
         syncContactsButton.style.opacity = '0.5';
         try {
@@ -1346,6 +1416,29 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsModal.classList.remove('hidden');
     });
 
+    // --- QR Code Display ---
+    const qrCodeModal = document.getElementById('qr-code-modal');
+    const qrCodeImage = document.getElementById('qr-code-image');
+    
+    function showQRCode(qrData) {
+        console.log('showQRCode called, qrData length:', qrData ? qrData.length : 0);
+        console.log('qrCodeModal:', qrCodeModal);
+        console.log('qrCodeImage:', qrCodeImage);
+        if (qrCodeModal && qrCodeImage) {
+            qrCodeImage.src = qrData;
+            qrCodeModal.classList.remove('hidden');
+            console.log('QR modal should be visible now');
+        } else {
+            console.log('QR modal elements not found!');
+        }
+    }
+    
+    function hideQRCode() {
+        if (qrCodeModal) {
+            qrCodeModal.classList.add('hidden');
+        }
+    }
+    
     // --- Initialize ---
     loadSettings();
     updateScrollButtonIcon(appSettings.theme || 'kawaii');

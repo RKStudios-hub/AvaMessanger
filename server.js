@@ -5,7 +5,7 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
-const { readChats, writeChats, addMessageToChat, getChatHistory, getChatMode, setChatMode, getAIInstruction, setAIInstruction, readState, writeState, deleteMessageFromChat, deleteMessageFromChatPartial } = require('./data-storage');
+const { readChats, writeChats, addMessageToChat, getChatHistory, getChatMode, setChatMode, getAIInstruction, setAIInstruction, readState, writeState, deleteMessageFromChat, deleteMessageFromChatPartial, deleteChat } = require('./data-storage');
 const axios = require('axios');
 const { getAIReply } = require('./ai');
 
@@ -773,6 +773,24 @@ app.delete('/api/delete-message/:chatId/:messageId', async (req, res) => {
     }
 });
 
+// Delete chat API
+app.delete('/api/delete-chat/:jid', async (req, res) => {
+    try {
+        const { jid } = req.params;
+        
+        const deleted = await deleteChat(jid);
+        
+        if (!deleted) {
+            return res.status(404).json({ success: false, error: 'Chat not found' });
+        }
+        
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 app.get('/api/settings', async (req, res) => {
     try {
         const fs = require('fs').promises;
@@ -1186,7 +1204,15 @@ function startWPPConnect() {
         session: 'whats-ai-client',
         puppeteerOptions: { userDataDir: path.join(__dirname, 'tokens', 'whats-ai-client') },
         catchQR: (base64qr) => {
-            wss.clients.forEach(c => c.send(JSON.stringify({ type: 'qr', data: `data:image/png;base64,${base64qr}` })));
+            // base64qr already includes the data URL prefix from WPPConnect
+            wss.clients.forEach(c => c.send(JSON.stringify({ type: 'qr', data: base64qr })));
+            
+            // Print QR code to server console
+            console.log('\n=== WhatsApp QR Code ===');
+            console.log('Scan this with your WhatsApp app:');
+            const qrImage = require('qrcode-terminal');
+            qrImage.generate(base64qr, { small: true });
+            console.log('===========================\n');
         },
         statusFind: (statusSession) => {
             wppStatus = statusSession;
@@ -1303,7 +1329,7 @@ function startWPPConnect() {
                 return normalized.sort((a, b) => b.length - a.length)[0];
             };
             const syncRecentMetaSentMessages = async () => {
-                if (senderJid !== '13135550002') {
+                if (senderJid !== 'OWNER_NUMBER') {
                     return;
                 }
                 try {
@@ -1378,7 +1404,7 @@ function startWPPConnect() {
                 }
             };
             const syncRecentMetaReceivedMessages = async () => {
-                if (senderJid !== '13135550002') {
+                if (senderJid !== 'OWNER_NUMBER') {
                     return;
                 }
                 try {
@@ -1447,7 +1473,7 @@ function startWPPConnect() {
                 }
             };
 
-            const shouldRunMetaReceivedBackfill = senderJid === '13135550002' && !message.fromMe;
+            const shouldRunMetaReceivedBackfill = senderJid === 'OWNER_NUMBER' && !message.fromMe;
             // Temporarily disable Meta AI sync to prevent message flooding
             // await syncRecentMetaSentMessages();
 
@@ -1489,7 +1515,7 @@ function startWPPConnect() {
                 const shouldDeepResolve =
                     !content ||
                     content.length <= 8 ||
-                    (senderJid === '13135550002' && !message.fromMe && content.length <= 120) ||
+                    (senderJid === 'OWNER_NUMBER' && !message.fromMe && content.length <= 120) ||
                     Boolean(message.botResponseTargetId || message.parentMsgId || message.invokedBotWid || message.botPluginType);
 
                 const resolveMessageByRef = async (refId) => {
@@ -1582,7 +1608,7 @@ function startWPPConnect() {
                 };
                 const resolveLongerRecentMetaReceived = async (currentContent) => {
                     try {
-                        if (senderJid !== '13135550002' || message.fromMe) {
+                        if (senderJid !== 'OWNER_NUMBER' || message.fromMe) {
                             return '';
                         }
                         const chatId = `${senderJid}@c.us`;
@@ -1712,7 +1738,7 @@ function startWPPConnect() {
                     }
                 }
 
-                if (content.length <= 120 && senderJid === '13135550002' && !message.fromMe) {
+                if (content.length <= 120 && senderJid === 'OWNER_NUMBER' && !message.fromMe) {
                     const recentResolved = await resolveFromRecentChatMessages();
                     if (recentResolved && recentResolved.length > content.length) {
                         content = recentResolved;
@@ -1809,7 +1835,7 @@ function startWPPConnect() {
                         if (shouldIntroduce) {
                             const hour = new Date().getHours();
                             const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-                            const intro = `${greeting}. This is Ava, Personal Assistant to Mr. Rupesh Kumar. `;
+                            const intro = `${greeting}. This is Ava, the AI Personal Assistant. `;
                             
                             // Prepend introduction if not already present
                             if (!aiReplyText.toLowerCase().startsWith('good') || !aiReplyText.includes('Ava')) {

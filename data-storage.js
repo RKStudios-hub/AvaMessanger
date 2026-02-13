@@ -349,6 +349,27 @@ async function deleteMessageFromChatPartial(chatId, messageId) {
 }
 
 
+/**
+ * Deletes an entire chat.
+ * @param {string} chatId - The chat JID
+ * @returns {Promise<boolean>} - True if deleted, false if not found
+ */
+async function deleteChat(chatId) {
+    try {
+        const chats = await readChats();
+        if (!chats[chatId]) {
+            return false;
+        }
+        
+        delete chats[chatId];
+        await writeChats(chats);
+        return true;
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+        return false;
+    }
+}
+
 module.exports = {
     readChats,
     writeChats,
@@ -361,5 +382,6 @@ module.exports = {
     readState,
     writeState,
     deleteMessageFromChat,
-    deleteMessageFromChatPartial
+    deleteMessageFromChatPartial,
+    deleteChat
 };

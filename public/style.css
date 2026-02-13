@@ -2384,3 +2384,37 @@ body:has(.sync-progress-bar.visible) .app-container {
 [data-theme="frappe"] .toast i {
     color: #a6d169;
 }
+
+/* QR Code Modal */
+#qr-code-modal {
+    z-index: 2000;
+}
+
+.qr-modal-content {
+    text-align: center;
+    padding: 30px;
+    max-width: 320px;
+    background: var(--bg-color);
+    border-radius: 16px;
+}
+
+.qr-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+#qr-code-image {
+    width: 250px;
+    height: 250px;
+    border-radius: 8px;
+    background: white;
+    padding: 10px;
+}
+
+.qr-modal-hint {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}

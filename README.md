@@ -1,147 +1,132 @@
-# AvaMessaging 🤖💬
+# Ava - WhatsApp AI Assistant
 
-A beautiful WhatsApp web client with built-in AI assistant features. Send messages, images, and more with a modern glassmorphism UI that feels just like the official WhatsApp Web — but smarter.
+Ava is your personal WhatsApp assistant that brings the power of AI to your messaging. Whether you need help replying to messages quickly, want toformalize your texts, or just need an intelligent assistant to handle your chats, Ava has got you covered.
 
-## Features
+## What is Ava?
 
-### Multi-Chat Support
-Handle all your WhatsApp conversations in one convenient place. View and manage all your chats with a beautiful, intuitive interface that makes switching between conversations seamless and easy.
+Ava is a web-based WhatsApp assistant that connects to your WhatsApp account and uses AI to help you manage your messages smarter. Think of it as having a smart secretary who can help draft replies, clean up your grammar, or even auto-respond when you're busy.
 
-### AI-Powered Modes
-Choose between three different AI modes to enhance your messaging experience:
+## Why Use Ava?
 
-- **AutoAI Mode**: The AI automatically generates intelligent replies based on your conversation context and personal chat style. Perfect for quick, smart responses.
-- **Semi-AI Mode**: Automatically corrects your grammar and converts Hinglish (Hindi-English mix) to proper English before sending. Your messages are polished while maintaining your original meaning.
-- **Manual Mode**: You have full control. Send messages as you type them without any AI modifications.
+- **Save Time**: Let AI help draft responses quickly
+- **Professional Messages**: Convert casual Hinglish to polished English
+- **Auto-Reply**: Set AI to respond when you can't
+- **Beautiful Interface**: Clean, modern UI that feels like WhatsApp
+- **Your Style**: Train Ava with your personal information
 
-### Beautiful Themes
-AvaMessaging comes with 4 stunning themes to match your mood and style:
+## What's Inside?
 
-- **Kawaii**: Soft pink and purple gradients with a cute, playful aesthetic
-- **Royal Dark**: Deep purple elegance with a sophisticated dark mode interface
-- **Catppuccin Mocha**: Calm coffee tones for a relaxing visual experience
-- **Frappe**: Pastel vibes with soft, soothing colors
+- **3 AI Modes**: Manual (you control), Semi-AI (fixes grammar), Auto-AI (auto-responds)
+- **4 Themes**: Kawaii, Royal Dark, Catppuccin Mocha, Frappe
+- **Media Support**: Send images, videos, audio, documents
+- **Real-time Sync**: Messages update instantly
+- **Message Delete**: Delete for yourself or everyone
 
-### Smart Message Sync
-Automatically synchronizes all your WhatsApp messages from your phone. The sync feature intelligently fetches your contacts and chat history, making sure you never miss a conversation.
+## How to Run
 
-### Media Sharing
-Share images, videos, audio messages, and documents directly through the web interface. Support for various media types makes communication richer and more expressive.
+### 1. Get Requirements Ready
 
-### Message Deletion
-Delete messages for yourself or everyone in the chat (subject to WhatsApp's time limitations). Manage your conversation history with ease.
+- **Node.js**: Download from nodejs.org (version 18 or higher)
+- **WhatsApp Account**: Your regular WhatsApp on phone
+- **Groq API Key**: Free key from https://console.groq.com
 
-### Real-time Updates
-Experience instant message delivery and receiving via WebSocket technology. Messages appear in real-time without needing to refresh the page.
+### 2. Setup
 
-## Getting Started
+```bash
+# Clone the project
+git clone https://github.com/RKStudios-hub/AvaMessanger.git
+cd AvaMessanger
 
-### Prerequisites
-
-- Node.js (v14 or higher)
-- A WhatsApp account
-- A Groq API key (free from [groq.com](https://groq.com))
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/RKStudios-hub/AvaMessanger.git
-   cd AvaMessanger
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Configure your environment:
-   - Open the `.env` file
-   - Add your Groq API key:
-     ```
-     GROQ_API_KEY=your_groq_api_key_here
-     ```
-
-4. Start the server:
-   ```bash
-   npm start
-   ```
-
-5. Open your browser and navigate to:
-   ```
-   http://localhost:3001
-   ```
-
-6. Scan the QR code with your WhatsApp mobile app to connect.
-
-## Configuration
-
-Customize your experience in the Settings menu:
-
-### Groq API Settings
-Enter your Groq API key to enable AI features. Get a free API key from [groq.com](https://groq.com).
-
-### AI Training
-Train the AI about yourself by entering information such as:
-- Your name and basic details
-- Your communication style preferences
-- Any specific terminology or phrases you commonly use
-- Your schedule and availability
-
-### AI Schedule
-Set your daily schedule to help the AI provide more contextually appropriate responses. For example:
-- 9AM-12PM: Work meetings
-- 1PM-5PM: Available for chat
-- 6PM-10PM: Family time
-
-### Theme Selection
-Choose from 4 beautiful themes to personalize your interface.
-
-## AI Modes Explained
-
-### AutoAI Mode
-When enabled, the AI analyzes the conversation context and generates suggested replies that match your communication style. Simply tap on the suggestion to send it, or type your own message.
-
-### Semi-AI Mode
-This mode acts as your personal grammar assistant:
-- Automatically fixes grammar and punctuation errors
-- Converts Hinglish (like "mai theek hu" or "tum kya kar rahe ho") to proper English ("I am fine" / "What are you doing")
-- Shows you both the original and corrected version before sending
-
-### Manual Mode
-Full manual control with no AI intervention. Type and send messages exactly as you write them.
-
-## Tech Stack
-
-- **Backend**: Node.js, Express
-- **WhatsApp Integration**: WPPConnect
-- **Frontend**: Vanilla JavaScript, CSS3 with glassmorphism effects
-- **Real-time Communication**: WebSocket for instant messaging
-- **AI**: Groq API with LLaMA 3.1 model for intelligent responses
-- **UI Icons**: Font Awesome
-
-## Project Structure
-
-```
-AvaMessanger/
-├── server.js          # Main server file with API endpoints
-├── ai.js             # AI integration with Groq API
-├── data-storage.js   # Local data persistence
-├── package.json      # Project dependencies
-├── .env              # Environment variables (API keys)
-├── public/
-│   ├── index.html    # Main HTML file
-│   ├── style.css     # Styling with glassmorphism
-│   └── script.js     # Frontend JavaScript
-└── chats.json        # Stored chat messages
+# Install dependencies
+npm install
 ```
 
-## License
+### 3. Configure
 
-MIT License
+Create a `.env` file in the project folder:
 
-## Made with ❤️ by RKStudios-hub
+```env
+PORT=3001
+GROQ_API_KEY=your_groq_api_key_here
+AI_TRAINING=Your name is [Your Name], you communicate professionally
+AI_SCHEDULE=
+```
+
+Get your free Groq API key:
+
+1. Go to https://console.groq.com
+2. Sign up/Login
+3. Click "Create API Key"
+4. Copy and paste it in your .env file
+
+### 4. Run
+
+```bash
+npm start
+```
+
+### 5. Connect WhatsApp
+
+1. Open browser to http://localhost:3001
+2. Scan the QR code with your WhatsApp phone app
+3. You're connected!
+
+## How to Use
+
+### AI Modes
+
+- **Manual**: Type and send normally
+- **Semi-AI**: Your message gets grammar-checked and formalized before sending
+- **Auto-AI**: AI reads incoming messages and replies automatically based on your training
+
+### Settings
+
+Click the settings icon to:
+
+- Add your Groq API key
+- Train AI with your info (name, style, etc.)
+- Set your daily schedule for smart replies
+- Change theme
+
+## Tech Details
+
+### APIs Used
+
+- **WPPConnect**: For WhatsApp Web connection
+- **Groq LLM API**: For AI responses (LLaMA 3.1 model)
+- **DiceBear API**: For avatar images
+
+### Built With
+
+- Node.js + Express (Backend)
+- Vanilla JavaScript (Frontend)
+- CSS3 with Glassmorphism
+- WebSocket (Real-time updates)
+
+## Troubleshooting
+
+**Messages not sending?**
+
+- Check your Groq API key is valid
+- Make sure WhatsApp is connected
+
+**AI not responding?**
+
+- Verify API key in Settings
+- Check internet connection
+
+**Need to reconnect?**
+
+- Delete the `tokens` folder and restart
+
+## Credits
+
+**Made by**: RKStudios-hub
+
+Built with ❤️ using open-source tools.
 
 ---
 
-For support and questions, please open an issue on GitHub.
+For bugs or feature requests: https://github.com/RKStudios-hub/AvaMessanger/issues
+
+*Use responsibly. This project is for personal use only and complies with WhatsApp's Terms of Service.*

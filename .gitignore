@@ -1,13 +1,17 @@
-# Ignore everything
-*
+# Dependencies
+node_modules/
 
-# But not these files
-!ai.js
-!server.js
-!data-storage.js
-!package.json
-!public/
-!chats.json
-!state.json
-!.gitignore
-!README.md
+# Environment files
+.env
+
+# Data files (user-specific)
+chats.json
+state.json
+tokens/
+
+# Backup files
+*.backup
+*_backup
+*.temp
+*_temp
+test.html
