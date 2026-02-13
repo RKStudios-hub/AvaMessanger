@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+# But not these files
+!ai.js
+!server.js
+!data-storage.js
+!package.json
+!public/
+!chats.json
+!state.json
+!.gitignore
+!README.md
