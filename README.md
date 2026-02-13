@@ -1,4 +1,4 @@
-# Ava - WhatsApp AI Assistant
+# Ava - WhatsApp Client with AI Assistant
 
 Ava is your personal WhatsApp assistant that brings the power of AI to your messaging. Whether you need help replying to messages quickly, want toformalize your texts, or just need an intelligent assistant to handle your chats, Ava has got you covered.
 
