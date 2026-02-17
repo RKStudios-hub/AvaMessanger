@@ -2,8 +2,8 @@
 
 Ava is your personal WhatsApp assistant that brings the power of AI to your messaging. Whether you need help replying to messages quickly, want toformalize your texts, or just need an intelligent assistant to handle your chats, Ava has got you covered.
 
-<img width="920" height="180" alt="1" src="https://github.com/user-attachments/assets/e927d54d-3c5c-4421-b147-9971ee577570" />
-<img width="920" height="180" alt="2" src="https://github.com/user-attachments/assets/a9192e4a-76a9-48b8-97da-0cc6850fde5f" />
+<img width="920" height="680" alt="1" src="https://github.com/user-attachments/assets/e927d54d-3c5c-4421-b147-9971ee577570" />
+<img width="920" height="680" alt="2" src="https://github.com/user-attachments/assets/a9192e4a-76a9-48b8-97da-0cc6850fde5f" />
 
 ## What is Ava?
 
